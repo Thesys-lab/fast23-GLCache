@@ -1,0 +1,90 @@
+1. new TTL buckets range 
+3. item metadata: 
+    a) add a new field trueTTL ratio: the trueTTL/TTL (u8) 
+    b) create age: coarse offset from segment create age (in min): i16  (10 days) 
+    c) add a new field: obj_type_id (u8) 
+    d) add last_access_age (in terms of fine and coarse time u16)
+    e) freq 
+
+4. change expire and tests 
+5. update last_access_time in hashtable_get 
+6. move freq from hash table to item metadata (so that we can get freq with much lower cost when scanning a seg, and it helps with concurrency: hash table lock and false sharing, problem: random writes and overhead, both of which should be fine, and we may move part of the hash table to PMEM/SSD, so writing in hash table is not guaranteed DRAM writes)
+7. change prune, copy, clear into two pass: estimate, copy 
+8. change stop ratio to 0.95 
+9. ttl 0 is treated as no store 
+10. clear expire flag is not well used and now the stat is wrong, this is my bad 
+11. change unlink to unlink_segment, which makes sure the TTL bucket is also updated 
+
+
+TODO 
+expire merge 
+explorer segment 
+change previous segment tail to write new obj 
+del ratio is zero 
+merged segment too empty 
+(bug) gradient descent may not be fully convex and one object type may stuck at the start 
+
+delayed expiration, expiration only happens until there are enough segment 
+close-to-empty merge_expired segment 
+
+
+TODO engineering 
+naming consistency: ttl_bucket.nseg() or ttl_bucket.get_nseg() 
+
+
+undo 
+1. value is not copied to segment 
+
+
+
+Discuss 
+    Segment ID starts from 1, TTL bucket starts from 0, it is good to be consistent, and it is good to use 0 as a start 
+
+
+
+
+engineer 
+    change age and idx to coarseDuration 
+    change obj_type_id to a new type (u8 is bad)
+
+    better error when eviction is not successful 
+
+
+
+Bug 
+    1. ttl_bucket.nseg is not decreased 
+    2. evict need to check n_bucket * 2 in the case of most segments fall into one bucket 
+    3. fix a bug when items on the merged segments have the same frequency and size, it may enter eviction loop if we keep too much from the first segment (compaction did not work)
+    4. can_evict should not have SEG_MATURE, otherwise if all segments are close to expire, no seg can be evicted 
+    5. (original) when expire, the next to merge of the bucket is not updated, so then the expired/cleaned segment is used in another TTL bucket, the next to merge will merge segments in the other bucket, previously, after update, it does not change ttl bucket metadata, but now we change, and we  changed the wrong ttl bucket metadata 
+    6. (me) use consistent expiration check, for example, whether create + TTL == curr is expired, this becomes an issue if write rate is too large and cache size is too small 
+    7. fix a bug in object size calculation where 8n becomes 8(n+1) 
+
+
+improvement 
+1. change target_ratio to target_size when estimating frequency so that more items can be retained if there are more space lefted 
+2. update the item frequency to (freq + 1) / 2 when copy to new segment 
+
+
+performance 
+    1. add link between TTL bucket so we can skip the unused bucket 
+    2. 
+
+
+good changes
+1. random select ttl bucket to evict instead of FIFO 
+2. dynamic adjust merge ratio based on the max merge chain len
+
+
+
+Observation 
+1. change to weighted_freq estimation and const stop_ratio, the impact of increased item metadata is almost compensated by better cutoff_freq 
+
+
+
+
+corner cases 
+1. too many TTLs 
+2. object too large so that a segment only has < 10 objects 
+3. objects have the same size and frequency 
+

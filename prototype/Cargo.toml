@@ -1,0 +1,57 @@
+[package]
+name = "bench"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[features]
+
+# metafeatures
+debug = [ ]
+
+# default set of enabled features
+default = [ ]
+
+
+[dependencies]
+argparse = "0.2.2"
+memmap = "0.7.0"
+lazy_static = "1.4.0" 
+byteorder = "1.4.0"
+
+segv1 = {path = "./src/segcachev1/"}
+l2cache = {path = "./src/l2cache/"}
+
+rustcommon-time = { git = "https://github.com/1a1a11a/rustcommon" }
+derivative = "2.2.0"
+thiserror = "1.0.30"
+log = "0.4.16"
+simple_logger = "2.0.0"
+
+# serde = {version="1.0.128", features = ["derive"]}
+# serde_json = "1.0"
+
+[profile.dev]
+opt-level = 3
+debug = true
+debug-assertions = true
+overflow-checks = true
+lto = false
+panic = 'unwind'
+incremental = true
+codegen-units = 16
+rpath = false
+
+[profile.release]
+opt-level = 3
+debug = false
+# debug = true
+debug-assertions = false
+overflow-checks = false
+lto = true
+# lto = true
+panic = 'unwind'
+incremental = false
+codegen-units = 16
+rpath = false

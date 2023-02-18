@@ -1,0 +1,80 @@
+name: build
+
+on: [push, pull_request]
+  # push:
+  #   branches: [master, develop]
+  # pull_request:
+  #   branches: [master, develop]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  # gcc7:
+  #   name: bionic / gcc-7
+  #   runs-on: ubuntu-18.04
+  #   env:
+  #     CC: gcc
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Prepare1
+  #       run: sudo apt install libglib2.0-dev libgoogle-perftools-dev build-essential cmake google-perftools
+  #     - name: Prepare2
+  #       run: bash scripts/setup.sh
+  #     - name: Configure CMake
+  #       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+  #     - name: Build
+  #       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+  #     - name: Run
+  #       run: make test
+        
+  # macos:
+  #   name: macos / clang
+  #   runs-on: macos-10.15
+  #   env:
+  #     CC: clang
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Prepare1
+  #       run: brew install gcc glib google-perftools libomp
+  #     - name: Prepare2
+  #       run: bash scripts/setup.sh
+  #     - name: Configure CMake
+  #       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+  #     - name: build
+  #       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+  #     - name: Run
+  #       continue-on-error: true
+  #       run: make test
+
+  # ubuntu:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Prepare1
+  #       run: sudo apt install libglib2.0-dev libgoogle-perftools-dev build-essential cmake google-perftools
+  #     - name: Prepare2
+  #       run: bash scripts/setup.sh
+  #     - name: Configure CMake
+  #       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+  #     - name: Build
+  #       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+  #     - name: Test
+  #       working-directory: ${{github.workspace}}/build
+  #       run: ctest -C ${{env.BUILD_TYPE}}
+
+  selfhosted:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure CMake
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      - name: Test
+        working-directory: ${{github.workspace}}/build
+        run: ctest -C ${{env.BUILD_TYPE}} -j4
+
+
+
