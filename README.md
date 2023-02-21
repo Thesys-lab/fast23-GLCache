@@ -18,7 +18,7 @@ It is a snapshot of [libCacheSim](https://github.com/1a1a11a/libCacheSim).
 See the [README](micro-implementation/README.md) in the micro-implementation folder for more details.
 
 ### Prototype
-The prototype is implemented in Rust based on a snapshot of [Pelikan Segcache(https://github.com/pelikan-io/pelikan).
+The prototype is implemented in Rust based on a snapshot of [Pelikan Segcache](https://github.com/pelikan-io/pelikan).
 See the [README](prototype/README.md) in the micro-implementation folder for more details.
 
 ### Traces
