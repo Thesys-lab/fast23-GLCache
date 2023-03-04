@@ -2,6 +2,9 @@
 # GL-Cache: Group-level learning for efficient and high-performance caching
 This repo contains code for FAST'23 paper: [GL-Cache: Group-level learning for efficient and high-performance caching](https://www.usenix.org/conference/fast23/presentation/yang-juncheng)
 
+![GL-Cache diagram](diagram.png)
+
+
 #### Abstract
 Web applications rely heavily on software caches to achieve low-latency, high-throughput services. To adapt to changing workloads, three types of learned caches (learned evictions) have been designed in recent years: object-level learning, learning-from-distribution, and learning-from-simple-experts. However, we argue that the learning granularity in existing ap- proaches is either too fine (object-level), incurring significant computation and storage overheads, or too coarse (workload or expert-level) to capture the differences between objects and leaves a considerable efficiency gap.
 
