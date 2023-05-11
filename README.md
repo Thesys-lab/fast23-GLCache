@@ -59,6 +59,15 @@ limitations under the License.
 This work was supported in part by Facebook Fellowship, NSF grants CNS 1901410, CNS 1956271, CNS 1763617, and a AWS grant.
 
 
-
+### Citation
+```bibtex
+@inproceedings{yang2023gl,
+  title={GL-Cache: Group-level learning for efficient and high-performance caching},
+  author={Yang, Juncheng and Mao, Ziming and Yue, Yao and Rashmi, KV},
+  booktitle={21st USENIX Conference on File and Storage Technologies (FAST 23)},
+  pages={115--134},
+  year={2023}
+}
+``` 
 
 
