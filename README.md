@@ -27,7 +27,7 @@ See the [README](prototype/README.md) in the micro-implementation folder for mor
 ### Traces
 The traces we used are all public, and a binary version of the traces can be found at [https://ftp.pdl.cmu.edu/pub/datasets/twemcacheWorkload/fast23_glcache/](https://ftp.pdl.cmu.edu/pub/datasets/twemcacheWorkload/fast23_glcache/)
 
-The traces are zstd compressed has the following format:
+The traces are [zstd](https://github.com/facebook/zstd) compressed and have the following format:
 ```c
 struct {
     uint32_t timestamp;
@@ -36,11 +36,11 @@ struct {
     int64_t next_access_vtime;  // -1 if no next access
 }
 ```
-You can used the compressed trace in the micro-implementation, however, if you use the prototype, you need to decompress the trace first.
+You can use the compressed trace in the micro-implementation, however, if you use the prototype, you need to decompress the trace first.
 
 
 ### License
-Copyright 2022, Carnegie Mellon University
+Copyright 2023, Carnegie Mellon University
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ This work was supported in part by Facebook Fellowship, NSF grants CNS 1901410, 
 ```bibtex
 @inproceedings{yang2023gl,
   title={GL-Cache: Group-level learning for efficient and high-performance caching},
-  author={Yang, Juncheng and Mao, Ziming and Yue, Yao and Rashmi, KV},
+  author={Yang, Juncheng and Mao, Ziming and Yue, Yao and Rashmi, K.V.},
   booktitle={21st USENIX Conference on File and Storage Technologies (FAST 23)},
   pages={115--134},
   year={2023}
